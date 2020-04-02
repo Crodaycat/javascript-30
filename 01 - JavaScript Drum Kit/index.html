@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <title>JS Drum Kit</title>
+  </head>
+  <body>
+    <div id="bkg" class="gradient-65" data-key="65"></div>
+    <div id="bkg" class="gradient-83" data-key="83"></div>
+    <div id="bkg" class="gradient-68" data-key="68"></div>
+    <div id="bkg" class="gradient-70" data-key="70"></div>
+    <div id="bkg" class="gradient-71" data-key="71"></div>
+    <div id="bkg" class="gradient-72" data-key="72"></div>
+    <div id="bkg" class="gradient-74" data-key="74"></div>
+    <div id="bkg" class="gradient-75" data-key="75"></div>
+    <div id="bkg" class="gradient-76" data-key="76"></div>
+    <div id="bkg" class="gradient-192" data-key="192"></div>
+
+    <div class="keys">
+      <div data-key="65" class="key">
+        <kbd>
+          A
+        </kbd>
+        <span class="sound">
+          Synth 1
+        </span>
+      </div>
+      <div data-key="83" class="key">
+        <kbd>
+          S
+        </kbd>
+        <span class="sound">
+          Synth 2
+        </span>
+      </div>
+      <div data-key="68" class="key">
+        <kbd>
+          D
+        </kbd>
+        <span class="sound">
+          Synth 3
+        </span>
+      </div>
+      <div data-key="70" class="key">
+        <kbd>
+          F
+        </kbd>
+        <span class="sound">
+          Guitar 1
+        </span>
+      </div>
+      <div data-key="71" class="key">
+        <kbd>
+          G
+        </kbd>
+        <span class="sound">
+          Piano
+        </span>
+      </div>
+      <div data-key="72" class="key">
+        <kbd>
+          H
+        </kbd>
+        <span class="sound">
+          Drums
+        </span>
+      </div>
+      <div data-key="74" class="key">
+        <kbd>
+          J
+        </kbd>
+        <span class="sound">
+          Synth 4
+        </span>
+      </div>
+      <div data-key="75" class="key">
+        <kbd>
+          K
+        </kbd>
+        <span class="sound">
+          Synth 5
+        </span>
+      </div>
+      <div data-key="76" class="key">
+        <kbd>
+          L
+        </kbd>
+        <span class="sound">
+          Guitar 2
+        </span>
+      </div>
+      <div data-key="192" class="key">
+        <kbd>
+          Ñ
+        </kbd>
+        <span class="sound">
+          Keys
+        </span>
+      </div>
+    </div>
+
+    <audio data-key="65" controls>
+      <source src="sounds/a.wav" type="audio/wav" />
+    </audio>
+
+    <audio data-key="83" controls>
+      <source src="sounds/s.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="68" controls>
+      <source src="sounds/d.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="70" controls>
+      <source src="sounds/f.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="71" controls>
+      <source src="sounds/g.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="72" controls>
+      <source src="sounds/h.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="74" controls>
+      <source src="sounds/j.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="75" controls>
+      <source src="sounds/k.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="76" controls>
+      <source src="sounds/l.wav" type="audio/wav" />
+    </audio>
+    <audio data-key="192" controls>
+      <source src="sounds/n.wav" type="audio/wav" />
+    </audio>
+
+    <script>
+      let bkgs = [];
+      let selectBkg = null;
+
+      setInterval(() => {
+        if (bkgs.length > 0) {
+          const index = Math.floor(Math.random() * bkgs.length);
+
+          if (selectBkg) {
+            selectBkg.style.opacity = '0';
+          }
+          selectBkg = bkgs[index];
+          selectBkg.style.opacity = '1';
+        }
+      }, 500);
+
+      function startStopSound(pause, audio) {
+        if (pause) {
+          audio.pause();
+          return;
+        }
+        audio.currentTime = 0;
+        audio.loop = true;
+        audio.play();
+      }
+
+      function addRemoveKeyStyle(remove, key) {
+        if (remove) {
+          key.classList.remove('playing');
+        } else {
+          key.classList.add('playing');
+        }
+      }
+
+      function addRemoveBkg(remove, keyCode) {
+        if (remove) {
+          const index = bkgs.findIndex(x => {
+            return x.dataset.key == keyCode;
+          });
+
+          if (index < 0) {
+            return;
+          }
+
+          const bkg = bkgs[index];
+
+          bkgs.splice(index, 1);
+          bkg.style.opacity = '0';
+        } else {
+          const actualBkg = document.querySelector(
+            `#bkg[data-key="${keyCode}"]`
+          );
+
+          bkgs.push(actualBkg);
+        }
+      }
+
+      function playSound(e) {
+        const keyCode = e.keyCode;
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${keyCode}"]`);
+
+        if (!audio) {
+          return;
+        }
+
+        const pause = !audio.paused;
+
+        startStopSound(pause, audio);
+        addRemoveKeyStyle(pause, key);
+
+        addRemoveBkg(pause, keyCode);
+      }
+
+      window.addEventListener('keydown', playSound);
+    </script>
+  </body>
+</html>
