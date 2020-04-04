@@ -1,0 +1,67 @@
+:root {
+  --rotation: 0deg;
+  --blur: 10px;
+  --back-color: #000000;
+}
+
+html {
+  font-family: 'helvetica neue';
+  text-align: center;
+  font-size: 10px;
+  background-color: var(--back-color);
+}
+
+body {
+  margin: 0;
+  font-size: 2rem;
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.controls {
+  padding: 10px;
+  background-color: rgba(225, 255, 255, 0.2);
+  position: absolute;
+  box-sizing: border-box;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.controls div {
+  display: inline-block;
+}
+
+input {
+  width: 100px;
+}
+
+.planet {
+  position: absolute;
+  background: url(./images/planet.png);
+  background-size: 200px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  right: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  margin: 0px auto;
+  background-position-y: 4px;
+}
+
+.bkg {
+  background: url(./images/sky.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transform: rotate(var(--rotation));
+  filter: blur(var(--blur));
+}
